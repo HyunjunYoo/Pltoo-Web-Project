@@ -7,6 +7,23 @@ body {
     background-color: #f0f0f0;
 }
 
+.main-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 100vh; /* Viewport height를 100% 채우기 */
+}
+
+#wrapper {
+    flex: 1;
+}
+
+#withdrawSection {
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 20px; /* 여백 추가 */
+}
+
 .logo {
     width: 160px;
     height: 80px;

@@ -6,6 +6,7 @@ import com.pltoo.membership.Service.MemberService;
 import com.pltoo.membership.dto.GameDTO;
 import com.pltoo.membership.dto.MemberDTO;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Map;
 
-
+@Slf4j
 @Controller
 @RequiredArgsConstructor
 public class MemberController {
@@ -57,8 +58,7 @@ public class MemberController {
     // 스프링에서는 이렇게 더 간단하게 만들 수 있다.
     public String save(@ModelAttribute MemberDTO memberDTO, Model model) {
         System.out.println("MemberController.save");
-        System.out.println("MemberDTO: " + memberDTO);
-
+        log.info("memerDTO={}",memberDTO);
         // Concatenate year, month, and day to form the birthDateFormatted string
         String birthDate = memberDTO.getMemberYear() + memberDTO.getMemberMonth() + memberDTO.getMemberDay();
         memberDTO.setBirthDateFormatted(birthDate); // Correctly use the setter method
@@ -73,7 +73,7 @@ public class MemberController {
 
     @GetMapping("html/nickname")
     public String nicknameSave(@ModelAttribute("memberEmail") String memberEmail,  Model model) {
-        model.addAttribute("memberEmail", memberEmail);
+        //model.addAttribute("memberEmail", memberEmail);
         return "html/nickname";
     }
 
@@ -138,7 +138,7 @@ public class MemberController {
             }
         });
 
-        return "index"; // 성공적으로 저장된 후 리다이렉트할 페이지
+        return "html/login_main"; // 성공적으로 저장된 후 리다이렉트할 페이지
     }
 
 

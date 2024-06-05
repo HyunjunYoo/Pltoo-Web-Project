@@ -9,6 +9,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const joinButton = document.getElementById('btnJoin');
     joinButton.addEventListener('click', function() {
-        window.location.href = '../main/index.html'; // 페이지 이동
+        window.location.href = '../main/login_main.html'; // 페이지 이동
     });
 });
