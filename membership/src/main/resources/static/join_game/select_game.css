@@ -129,6 +129,8 @@ h2{
     /* 버튼 스타일 */
 .btn_area {
     margin-bottom: 150px; /* 입력 필드와 버튼 사이의 간격 */
+    display: flex;
+    justify-content: center; /* 가로로 가운데 정렬 */
 }
 
 #btnJoin {

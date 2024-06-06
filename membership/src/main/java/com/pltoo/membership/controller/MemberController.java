@@ -7,14 +7,17 @@ import com.pltoo.membership.dto.GameDTO;
 import com.pltoo.membership.dto.MemberDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.internal.Errors;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.Member;
+import java.util.HashMap;
 import java.util.Map;
+
 
 @Slf4j
 @Controller
@@ -28,7 +31,7 @@ public class MemberController {
     //회원가입 페이지 출력 요청
     @GetMapping("join/join")
     public String saveForm() {
-        return "/member/join";
+        return "/html/join";
     }
 
     // 전달해온 값을 받는다. RequestParam이라는걸 이용해서 담겨온 값을 옮겨 담는다.
@@ -54,9 +57,18 @@ public class MemberController {
 //        System.out.println("memberPno: " + memberPno);
 //        return "index";
 //    }
+
+    @PostMapping("/check-email")
+    public ResponseEntity<Map<String, Boolean>> checkEmail(@RequestParam String memberEmail) {
+        boolean exists = memberService.emailExists(memberEmail);
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("exists", exists);
+        return ResponseEntity.ok(response);
+    }
+
     @PostMapping("join/join")
     // 스프링에서는 이렇게 더 간단하게 만들 수 있다.
-    public String save(@ModelAttribute MemberDTO memberDTO, Model model) {
+    public String save(@ModelAttribute @Validated MemberDTO memberDTO, Model model, Errors errors) {
         System.out.println("MemberController.save");
         log.info("memerDTO={}",memberDTO);
         // Concatenate year, month, and day to form the birthDateFormatted string
@@ -67,6 +79,8 @@ public class MemberController {
         System.out.println(memberDTO.toString());
 
         model.addAttribute("memberEmail", memberDTO.getMemberEmail());
+
+        log.info("Email is unique. Proceeding to save member.");
         memberService.save(memberDTO);
         return "redirect:/html/nickname?memberEmail=" + memberDTO.getMemberEmail();
     }
@@ -137,8 +151,9 @@ public class MemberController {
                 gameService.createGame(gameDTO);
             }
         });
-
-        return "html/login_main"; // 성공적으로 저장된 후 리다이렉트할 페이지
+        // MyProfileController의 login_main 메서드로 포워딩
+       // return "forward:html/login_main"; // 성공적으로 저장된 후 리다이렉트할 페이지
+        return "html/joinLogin";
     }
 
 

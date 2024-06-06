@@ -207,3 +207,33 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 });
+
+document.addEventListener("DOMContentLoaded", function() {
+    var form = document.querySelector("form");
+    form.addEventListener("submit", function(event) {
+        event.preventDefault(); // 기본 폼 제출 방지
+
+        var memberEmail = document.getElementById('email').value;
+        $.ajax({
+            url: '/check-email', // 이메일 중복 검사를 처리하는 URL
+            type: 'POST',
+            data: { memberEmail: memberEmail },
+            dataType: 'json'
+        })
+            .done(function(data) {
+                console.log(data);  // 서버 응답 로깅
+                if (data.exists) {
+                    alert("이미 존재하는 이메일입니다."); // 중복 알림
+                } else {
+                    // 중복이 없을 경우 폼을 서버에 제출하고, 성공적으로 제출된 후 페이지를 새로고침
+                    form.submit();
+                    window.setTimeout(function() {
+                        location.reload(true); // 폼 제출 후 페이지를 새로고침
+                    }, 1000); // 폼 제출 후 충분한 시간을 주어 서버가 처리할 수 있도록 합니다
+                }
+            })
+            .fail(function(xhr, status, error) {
+                alert("오류가 발생했습니다. 다시 시도해주세요."); // 오류 알림
+            });
+    });
+});

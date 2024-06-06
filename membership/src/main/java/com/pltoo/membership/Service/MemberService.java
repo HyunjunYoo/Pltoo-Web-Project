@@ -3,6 +3,7 @@ package com.pltoo.membership.Service;
 import com.pltoo.membership.dto.MemberDTO;
 import com.pltoo.membership.entity.MemberEntity;
 import com.pltoo.membership.repository.MemberRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.modelmapper.ModelMapper;
@@ -37,8 +38,8 @@ public class MemberService {
         memberRepository.save(member);
     }
 
-    private MemberDTO convertToDTO(Long memberEntity) {
-        return modelMapper.map(memberEntity, MemberDTO.class);
+    public boolean emailExists(String memberEmail) {
+        return memberRepository.existsByMemberEmail(memberEmail);
     }
 
 }
